@@ -1,96 +1,62 @@
+<!-- Dash ProfilePage Code without upload file utility -->
+
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Link } from "react-router-dom";
 import {
-  updateStart,
-  updateSuccess,
-  updateFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
-  signOutSuccess,
+updateStart,
+updateSuccess,
+updateFailure,
+deleteUserStart,
+deleteUserSuccess,
+deleteUserFailure,
+signOutSuccess,
 } from "../redux/user/userSlice.js";
 import { useDispatch } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { uploadImageToCloudinary } from "../utils/cloudinaryUploader.js"; // Import the utility function
 
 export default function DashProfile() {
-  const { currentUser, error, loading } = useSelector((state) => state.user);
-  const [imageFile, setImageFile] = useState(null);
-  const [imageFileUrl, setImageFileUrl] = useState(null);
-  const [imageFileUploading, setImageFileUploading] = useState(false);
-  const [imageFileUploadError, setImageFileUploadError] = useState(null);
-  const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
-  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
-  const [updateUserError, setUpdateUserError] = useState(null);
-  const [formData, setFormData] = useState({});
-  const [showModal, setShowModal] = useState(false);
-  const dispatch = useDispatch();
+const { currentUser, error, loading } = useSelector((state) => state.user);
+const [imageFile, setImageFile] = useState(null);
+const [imageFileUrl, setImageFileUrl] = useState(null);
+const [imageFileUploading, setImageFileUploading] = useState(false);
+const [imageFileUploadError, setImageFileUploadError] = useState(null);
+const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
+const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+const [updateUserError, setUpdateUserError] = useState(null);
+const [formData, setFormData] = useState({});
+const [showModal, setShowModal] = useState(false);
+const dispatch = useDispatch();
+// console.log(imageFileUploadProgress + "%");
+// console.log("image uploading :", imageFileUploading);
 
-  const filePickerRef = useRef();
+const filePickerRef = useRef();
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+const handleImageChange = (e) => {
+const file = e.target.files[0];
+
     if (file) {
       setImageFile(file);
       setImageFileUrl(URL.createObjectURL(file));
     }
-  };
 
-  const handleChange = (e) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [e.target.id]: e.target.value,
-    }));
-  };
+};
 
-  const handleDeleteUser = async () => {
-    setShowModal(false);
+const handleChange = (e) => {
+setFormData((prevFormData) => ({
+...prevFormData,
+[e.target.id]: e.target.value,
+}));
+};
 
-    try {
-      dispatch(deleteUserStart());
+// console.log("form data :", formData);
 
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      });
-
-      const data = res.json();
-
-      if (!res.ok) {
-        dispatch(deleteUserFailure(data.message));
-      } else {
-        dispatch(deleteUserSuccess(data));
-      }
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
-      // console.log(error);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      const res = await fetch("/api/user/signout", {
-        method: "POST",
-      });
-
-      const data = await res.json();
-      console.log("signout :", data);
-
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(signOutSuccess());
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+e.preventDefault();
 
     setUpdateUserError(null);
     setUpdateUserSuccess(null);
@@ -128,52 +94,105 @@ export default function DashProfile() {
       dispatch(updateFailure(error.message));
       setUpdateUserError(error.message);
     }
-  };
 
-  useEffect(() => {
-    const uploadImage = async () => {
-      setImageFileUploading(true);
-      setImageFileUploadError(null);
+};
 
-      try {
-        const secureUrl = await uploadImageToCloudinary(
-          imageFile,
-          "althaf", // Replace with your Cloudinary upload preset
-          "muhammadalthaf", // Replace with your Cloudinary cloud name
-          (progressEvent) => {
+const handleDeleteUser = async () => {
+setShowModal(false);
+
+    try {
+      dispatch(deleteUserStart());
+
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+
+      const data = res.json();
+
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      // console.log(error);
+    }
+
+};
+
+const handleSignOut = async () => {
+try {
+const res = await fetch("/api/user/signout", {
+method: "POST",
+});
+
+      const data = await res.json();
+      console.log("signout :", data);
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signOutSuccess());
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+};
+
+useEffect(() => {
+if (imageFile) {
+uploadImageToCloudinary();
+}
+}, [imageFile]);
+
+const uploadImageToCloudinary = async () => {
+setImageFileUploading(true);
+setImageFileUploadError(null);
+
+    const imageFormData = new FormData();
+    imageFormData.append("file", imageFile);
+    imageFormData.append("upload_preset", "althaf");
+    imageFormData.append("cloud_name", "muhammadalthaf");
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/muhammadalthaf/image/upload`,
+        imageFormData,
+        {
+          onUploadProgress: (progressEvent) => {
             const progress = Math.round(
               (progressEvent.loaded / progressEvent.total) * 100
             );
             setImageFileUploadProgress(progress);
-          }
-        );
+          },
+        }
+      );
+      const imageUrl = res.data.secure_url;
+      setImageFileUrl(imageUrl); // Use the uploaded image URL
 
-        setImageFileUrl(secureUrl);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        profilePicture: imageUrl,
+      }));
 
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          profilePicture: secureUrl,
-        }));
-
-        setImageFileUploading(false);
-      } catch (error) {
-        console.log(error);
-        setImageFileUploadError("Failed to upload image. Please try again.");
-        setImageFileUploadProgress(null);
-        setImageFile(null);
-        setImageFileUrl(null);
-        setImageFileUploading(false);
-      }
-    };
-
-    if (imageFile) {
-      uploadImage();
+      setImageFileUploading(false);
+      // console.log("Image uploaded successfully:", imageUrl);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setImageFileUploadError("Failed to upload image. Please try again.");
+      setImageFileUploadProgress(null);
+      setImageFile(null);
+      setImageFileUrl(null);
+      setImageFileUploading(false);
     }
-  }, [imageFile]);
 
-  return (
-    <div className="max-w-lg mx-auto p-3 w-full mt-28">
-      <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
+};
+
+return (
+<div className="max-w-lg mx-auto p-3 w-full mt-28">
+<h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
@@ -319,5 +338,6 @@ export default function DashProfile() {
         </Modal.Body>
       </Modal>
     </div>
-  );
+
+);
 }
