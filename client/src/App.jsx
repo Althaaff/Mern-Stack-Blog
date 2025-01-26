@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import CreatePost from "./pages/CreatePost";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
   return (
@@ -31,6 +32,11 @@ export default function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        pauseOnHover={true}
+        autoClose={3000}
+      />{" "}
     </>
   );
 }
