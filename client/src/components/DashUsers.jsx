@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Button, Modal, Table } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
-// import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
@@ -57,23 +56,25 @@ export default function DashUsers() {
   };
 
   const handleDeleteUser = async () => {
-    const res = await fetch(
-      `/api/user/deleteuser/${userIdToDelete}/${currentUser._id}`,
-      {
+    try {
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
         method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Deleted");
+
+        setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+
+        setShowModal(false);
+      } else {
+        console.log(data.message);
       }
-    );
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      toast.error(data.message || "failed to delete post");
-    } else {
-      setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
-      toast.success("post deleted successfully");
+    } catch (error) {
+      console.log(error.message);
     }
-
-    setShowModal(false);
   };
 
   return (
@@ -106,7 +107,9 @@ export default function DashUsers() {
                     </Table.Cell>
 
                     <Table.Cell>{user.username}</Table.Cell>
-                    <Table.Cell>{user.email}</Table.Cell>
+                    <Table.Cell className="max-w-xs truncate">
+                      {user.email}
+                    </Table.Cell>
                     <Table.Cell>
                       {user.isAdmin ? (
                         <FaCheck className="text-green-500" />
