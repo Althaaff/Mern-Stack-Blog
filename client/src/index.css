@@ -2,11 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   height: 100vh;
 }
 
 .ql-editor {
   font-size: 1.05rem;
+}
+
+.post-content {
+  text-align: centrr
+  ;
+}
+
+.post-content p {
+  font-size: 0.5rem;
+}
+
+.post-content h2 {
+  font-size: 1.4rem;
+  font-family: sans-serif;
+  margin: 1.5rem 0;
+}
+
+
+.post-content a {
+  color: rgb(73, 149, 199);
+  text-decoration: none;
+  font-size: 19px;
+}
+
+.post-content a:hover {
+  text-decoration: underline;
+  transition: all;
+  cursor: pointer;
+}
+
+.dark .post-content a {
+ color: red;
 }

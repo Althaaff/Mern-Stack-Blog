@@ -15,7 +15,7 @@ const router = express.Router();
 //   res.json({ message: "Api is working!" });
 // });
 
-// tested :
+// test api :
 router.get("/test", test);
 
 router.put("/update/:userId", verifyToken, updateUser); // router.put(path, handler)

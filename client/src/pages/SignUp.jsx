@@ -10,7 +10,7 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
@@ -30,6 +30,7 @@ export default function SignUp() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      console.log(data);
 
       if (data.success === false) {
         return setErrorMessage("username is already exist!");
@@ -45,7 +46,7 @@ export default function SignUp() {
     }
   };
 
-  console.log(formData);
+  // console.log(formData);
 
   return (
     <div className="min-h-screen mt-20">

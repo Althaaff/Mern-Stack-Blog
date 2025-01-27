@@ -12,6 +12,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import CreatePost from "./pages/CreatePost";
 import { ToastContainer } from "react-toastify";
 import UpdatePost from "./pages/UpdatePost.jsx";
+import PostPage from "./pages/PostPage.jsx";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/update-post/:postId" element={<UpdatePost />} />
           </Route>
           <Route path="/projects" element={<Projects />} />
+          <Route path="/post/:postSlug" element={<PostPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
