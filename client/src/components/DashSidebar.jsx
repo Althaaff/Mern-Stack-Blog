@@ -1,6 +1,7 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import {
+  HiAnnotation,
   HiArrowSmRight,
   HiDocumentText,
   HiOutlineUserGroup,
@@ -34,7 +35,7 @@ export default function DashSlider() {
       });
 
       const data = await res.json();
-      console.log("signout successfully! :", data);
+      // console.log("signout successfully!");
 
       if (!res.ok) {
         console.log(data.message);
@@ -81,6 +82,18 @@ export default function DashSlider() {
                 as="div"
               >
                 Users
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=comments" className="mt-1">
+              <Sidebar.Item
+                active={tab === "comments"}
+                icon={HiAnnotation}
+                as="div"
+              >
+                Comments
               </Sidebar.Item>
             </Link>
           )}
