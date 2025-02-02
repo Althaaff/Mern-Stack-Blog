@@ -55,7 +55,7 @@ export default function Header() {
 
   return (
     <>
-      <Navbar className="border-b-2">
+      <Navbar className="border-b-2 fixed top-0 left-0 w-full z-50 bg-white dark:bg-gray-900">
         <Link
           to="/"
           className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
@@ -124,17 +124,38 @@ export default function Header() {
 
         {/* hamberger menu */}
         <Navbar.Collapse>
-          <Navbar.Link active={path === "/"} as={"div"}>
-            <Link to="/">Home</Link>
-          </Navbar.Link>
+          <Link
+            to="/"
+            className={`block px-3 py-2 text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
+              path === "/"
+                ? "bg-gray-100 dark:bg-gray-800 text-indigo-600"
+                : "text-gray-700 dark:text-gray-300"
+            }`}
+          >
+            Home
+          </Link>
 
-          <Navbar.Link active={path === "/about"} as={"div"}>
-            <Link to="/about">About</Link>
-          </Navbar.Link>
+          <Link
+            to="/about"
+            className={`block  px-3 py-2  text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
+              path === "/about"
+                ? "bg-gray-100 dark:bg-gray-800 text-indigo-600"
+                : "text-gray-700 dark:text-gray-300"
+            }`}
+          >
+            About
+          </Link>
 
-          <Navbar.Link active={path === "/projects"} as={"div"}>
-            <Link to="/projects">Projects</Link>
-          </Navbar.Link>
+          <Link
+            to="/projects"
+            className={`block  px-3 py-2  text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
+              path === "/projects"
+                ? "bg-gray-100 dark:bg-gray-800 text-indigo-600"
+                : "text-gray-700 dark:text-gray-300"
+            }`}
+          >
+            Projects
+          </Link>
         </Navbar.Collapse>
       </Navbar>
     </>

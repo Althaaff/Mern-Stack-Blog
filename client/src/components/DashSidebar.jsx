@@ -48,7 +48,7 @@ export default function DashSlider() {
     }
   };
   return (
-    <Sidebar className="w-full md:w-56">
+    <Sidebar className="w-full md:w-56 mt-16">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
           {currentUser.isAdmin && (

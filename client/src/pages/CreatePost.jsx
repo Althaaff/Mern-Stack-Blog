@@ -5,7 +5,7 @@ import { useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
-import { uploadImageToCloudinary } from "../utils/cloudinaryUploader.js"; // Import the utility functiony
+import { uploadImageToCloudinary } from "../utils/cloudinaryUploader.js";
 
 export default function CreatePost() {
   const [file, setFile] = useState(null);
@@ -13,9 +13,10 @@ export default function CreatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
+  const [generatingContent, setGeneratingContent] = useState(false);
   const navigate = useNavigate();
 
-  const handleUpdloadImage = async () => {
+  const handleUploadImage = async () => {
     try {
       if (!file) {
         setImageUploadError("Please select an image");
@@ -23,18 +24,16 @@ export default function CreatePost() {
       }
       setImageUploadError(null);
 
-      // Use the utility function to upload the image
       const imageUrl = await uploadImageToCloudinary(
         file,
-        "althaf", // upload preset
-        "muhammadalthaf", // cloud name
+        "althaf",
+        "muhammadalthaf",
         (progressEvent) => {
           const progress = (progressEvent.loaded / progressEvent.total) * 100;
           setImageUploadProgress(progress.toFixed(0));
         }
       );
 
-      // Set the image URL in the form data
       setImageUploadProgress(null);
       setImageUploadError(null);
       setFormData({ ...formData, image: imageUrl });
@@ -45,10 +44,56 @@ export default function CreatePost() {
     }
   };
 
+  const handleGenerateContent = async () => {
+    try {
+      if (!formData.category) {
+        setPublishError("Please select a category to generate content.");
+        return;
+      }
+
+      setGeneratingContent(true);
+      setPublishError(null);
+
+      const res = await fetch("/api/generate/generate-content", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ category: formData.category }),
+      });
+
+      const data = await res.json();
+      // console.log("Generated Content Response:", data);
+
+      if (!res.ok) {
+        setPublishError(data.message || "Failed to generate content.");
+        return;
+      }
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        content: data.content,
+      }));
+    } catch (error) {
+      setPublishError("Something went wrong while generating content.");
+      console.error(error);
+    } finally {
+      setGeneratingContent(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      // Validate required fields
+      if (!formData.title || !formData.category || !formData.content) {
+        setPublishError("Please fill all required fields.");
+        return;
+      }
+
+      // console.log("Form Data submitted:", formData);
+
       const res = await fetch("/api/post/create", {
         method: "POST",
         headers: {
@@ -58,23 +103,27 @@ export default function CreatePost() {
       });
 
       const data = await res.json();
-      console.log("slug data :", data);
+      // console.log("Backend Response:", data);
 
       if (!res.ok) {
-        setPublishError(data.message);
+        setPublishError(data.message || "Failed to publish the post.");
         return;
       }
+
       if (res.ok) {
         setPublishError(null);
+        // console.log("Navigating to:", `/post/${data.slug}`);
+        console.log("post is created!");
         navigate(`/post/${data.slug}`);
       }
     } catch (error) {
-      setPublishError("Something went wrong..");
+      console.error("Publish Error:", error);
+      setPublishError("Something went wrong while publishing the post.");
     }
   };
 
   return (
-    <div className="p-3 max-w-3xl mx-auto min-h-screen">
+    <div className="p-3 max-w-3xl mx-auto min-h-screen mt-9">
       <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -116,7 +165,7 @@ export default function CreatePost() {
             gradientDuoTone="purpleToBlue"
             size="sm"
             outline
-            onClick={handleUpdloadImage}
+            onClick={handleUploadImage}
             disabled={imageUploadProgress}
           >
             {imageUploadProgress ? (
@@ -144,6 +193,7 @@ export default function CreatePost() {
           placeholder="Write something..."
           className="h-72 mb-12"
           required
+          value={formData.content || ""}
           onChange={(value) => {
             setFormData((prevFormData) => ({
               ...prevFormData,
@@ -151,10 +201,19 @@ export default function CreatePost() {
             }));
           }}
         />
-        <Button type="submit" gradientDuoTone="purpleToPink">
-          Publish
-        </Button>
-
+        <div className="flex gap-4">
+          <Button
+            type="button"
+            gradientDuoTone="purpleToBlue"
+            onClick={handleGenerateContent}
+            disabled={generatingContent}
+          >
+            {generatingContent ? "Generating..." : "Generate Content"}
+          </Button>
+          <Button type="submit" gradientDuoTone="purpleToPink">
+            Publish
+          </Button>
+        </div>
         {publishError && (
           <Alert color="failure" className="mt-5">
             {publishError}

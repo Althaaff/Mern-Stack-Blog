@@ -80,7 +80,7 @@ export default function DashPosts() {
     setShowModal(false);
   };
   return (
-    <div className="w-full h-full table-auto overflow-x-scroll md:mx-auto p-3 scrollbar md:scrollbar-none scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="w-full h-full mt-14 table-auto overflow-x-scroll md:mx-auto p-3 scrollbar md:scrollbar-none scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className="shadow-md">

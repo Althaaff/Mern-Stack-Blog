@@ -1,6 +1,5 @@
 import { errorHandler } from "../utils/errorHandler.js";
 import { Post } from "../models/post.model.js";
-import { User } from "../models/user.model.js";
 
 export const createPost = async (req, res, next) => {
   console.log(req.user);
@@ -23,8 +22,7 @@ export const createPost = async (req, res, next) => {
     .split(" ")
     .join("-")
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9-]+/g, "") // Replace one or more invalid characters with a single "-"
-    .replace(/^-+|-+$/g, "");
+    .replace(/[^a-zA-Z0-9-]+/g, ""); // Replace one or more invalid characters with a single "-"
 
   const newPost = new Post({
     ...req.body,
@@ -37,7 +35,7 @@ export const createPost = async (req, res, next) => {
 
     res.status(200).json(savedPost);
   } catch (error) {
-    console.log(error);
+    console.log("error :", error);
     next(error);
   }
 };

@@ -84,7 +84,7 @@ export default function DashComments() {
   };
 
   return (
-    <div className="w-full h-full table-auto overflow-x-scroll md:mx-auto p-3 scrollbar md:scrollbar-none scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="w-full h-full mt-14 table-auto overflow-x-scroll md:mx-auto p-3 scrollbar md:scrollbar-none scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {currentUser.isAdmin && comments.length > 0 ? (
         <>
           <Table hoverable className="shadow-md">
@@ -99,8 +99,11 @@ export default function DashComments() {
 
             {comments.map((comment) => (
               <>
-                <Table.Body className="devide-y" key={comment._id}>
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Body className="devide-y">
+                  <Table.Row
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                    key={comment._id}
+                  >
                     <Table.Cell>
                       {new Date(comment.updatedAt).toLocaleDateString()}
                     </Table.Cell>

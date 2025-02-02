@@ -87,7 +87,7 @@ export default function DashBoardComp() {
 
   return (
     <>
-      <div className="p-3 md:mx-auto ">
+      <div className="p-3 md:mx-auto mt-16 ">
         <div className="flex-wrap flex justify-center gap-4 mt-4">
           {/* Total Users */}
           <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
