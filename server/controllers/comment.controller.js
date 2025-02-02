@@ -24,14 +24,24 @@ export const createComment = async (req, res, next) => {
     next(error);
   }
 };
-
 export const getPostComments = async (req, res, next) => {
   try {
-    const comments = await Comment.find({ postId: req.params.postId }).sort({
-      createdAt: -1,
-    });
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 5; // Default to 5 initially
 
-    res.status(200).json(comments);
+    // Fetch comments based on pagination
+    const comments = await Comment.find({ postId: req.params.postId })
+      .sort({ createdAt: -1 })
+      .skip(startIndex)
+      .limit(limit);
+
+    // Check if there are more comments in the database
+    const totalComments = await Comment.countDocuments({
+      postId: req.params.postId,
+    });
+    const hasMore = totalComments > startIndex + limit;
+
+    res.status(200).json({ comments, hasMore });
   } catch (error) {
     next(error);
   }

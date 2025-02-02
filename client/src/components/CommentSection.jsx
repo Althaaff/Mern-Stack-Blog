@@ -9,9 +9,10 @@ export default function ComentSection({ postId }) {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-  const [commentError, seCommentError] = useState(null);
+  const [commentError, setCommentError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
+  const [showMore, setShowMore] = useState(false);
   const navigate = useNavigate();
   // console.log("comments :", comments);
 
@@ -103,23 +104,29 @@ export default function ComentSection({ postId }) {
 
       if (res.ok) {
         setComment("");
-        seCommentError(null);
+        setCommentError(null);
 
         setComments([data, ...comments]);
       }
     } catch (error) {
-      seCommentError(error.message);
+      setCommentError(error.message);
     }
   };
 
   useEffect(() => {
     const getComments = async () => {
       try {
-        const res = await fetch(`/api/comment/getPostComments/${postId}`);
+        const res = await fetch(
+          `/api/comment/getPostComments/${postId}?limit=5`
+        );
 
         if (res.ok) {
           const data = await res.json();
-          setComments(data);
+          setComments(data.comments);
+          // console.log("comments data :", data.comments);
+
+          // Show Load More if there are more than 5 comments
+          setShowMore(data.hasMore); //Boolean from backend
         }
       } catch (error) {
         console.log(error);
@@ -127,6 +134,24 @@ export default function ComentSection({ postId }) {
     };
     getComments();
   }, [postId]);
+
+  const handleShowMore = async () => {
+    try {
+      const res = await fetch(
+        `/api/comment/getPostComments/${postId}?startIndex=5`
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setComments((prevComments) => [...prevComments, ...data.comments]);
+
+        setShowMore(false);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
@@ -195,7 +220,7 @@ export default function ComentSection({ postId }) {
               <p>{comments.length}</p>
             </div>{" "}
           </div>
-          {comments.map((comment) => (
+          {comments?.map((comment) => (
             <Comment
               comment={comment}
               key={comment._id}
@@ -207,6 +232,16 @@ export default function ComentSection({ postId }) {
               }}
             />
           ))}
+        </>
+      )}
+      {showMore && (
+        <>
+          <span
+            className="text-blue-500 hover:underline  text-sm flex justify-center mt-3"
+            onClick={handleShowMore}
+          >
+            load more..
+          </span>
         </>
       )}
       <Modal

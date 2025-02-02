@@ -1,19 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  height: 100vh;
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  height: 100vh;
+  font-family: "Inter", sans-serif;
+}
 
 .ql-editor {
   font-size: 1.05rem;
 }
 
 .post-content {
-  text-align: centrr
-  ;
+  text-align: centrr;
 }
 
 .post-content p {
@@ -25,7 +30,6 @@ body {
   font-family: sans-serif;
   margin: 1.5rem 0;
 }
-
 
 .post-content a {
   color: rgb(73, 149, 199);
@@ -40,5 +44,5 @@ body {
 }
 
 .dark .post-content a {
- color: red;
+  color: red;
 }
