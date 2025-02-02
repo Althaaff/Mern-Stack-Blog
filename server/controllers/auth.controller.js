@@ -61,7 +61,8 @@ export const signin = async (req, res, next) => {
 
     const token = jwt.sign(
       { id: validUser._id, isAdmin: validUser.isAdmin },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     );
 
     const { password: pass, ...rest } = validUser._doc;
@@ -70,6 +71,7 @@ export const signin = async (req, res, next) => {
       .status(200)
       .cookie("access_token", token, {
         httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 👈 Cookie expires in 1 day (in milliseconds)
       })
       .json(rest);
   } catch (error) {
@@ -125,13 +127,17 @@ export const google = async (req, res, next) => {
     // Generate a token for the new user
     const token = jwt.sign(
       { id: newUser._id, isAdmin: newUser.isAdmin },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" } // 👈 token expires 1 day
     );
     const { password, ...rest } = newUser._doc;
 
     return res
       .status(200)
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 👈 Cookie expires in 1 day (in milliseconds)
+      })
       .json(rest);
   } catch (error) {
     console.error("Error in Google controller:", error.message);
