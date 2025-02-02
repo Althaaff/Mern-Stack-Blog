@@ -85,20 +85,6 @@ export default function Search() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const urlParams = new URLSearchParams(location.search);
-
-    urlParams.set("searchTerm", sideBarData.searchTerm);
-    urlParams.set("sort", sideBarData.sort);
-    urlParams.set("category", sideBarData.category);
-
-    const searchQuery = urlParams.toString();
-
-    navigate(`/search?${searchQuery}`);
-  };
-
   const handleShowMore = async () => {
     const numberOfPosts = posts.length;
     const startIndex = numberOfPosts;
@@ -124,6 +110,20 @@ export default function Search() {
         setShowMore(false);
       }
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const urlParams = new URLSearchParams(location.search);
+
+    urlParams.set("searchTerm", sideBarData.searchTerm);
+    urlParams.set("sort", sideBarData.sort);
+    urlParams.set("category", sideBarData.category);
+
+    const searchQuery = urlParams.toString();
+
+    navigate(`/search?${searchQuery}`);
   };
 
   return (
