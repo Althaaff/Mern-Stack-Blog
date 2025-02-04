@@ -1,15 +1,15 @@
 export default function About() {
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen mt-3">
       <div className="max-w-2xl mx-auto p-3 text-center">
         <div>
           <h1 className="text-3xl font-semibold text-center my-7">
-            Medium <span className="text-red-500">Blog</span>
+            WriteFlow <span className="text-red-500">Blog</span>
           </h1>
 
           <div className="text-md text-gray-500 flex flex-col gap-6">
             <p>
-              Welcome to Medium Blog! This blog was created by{" "}
+              Welcome to WriteFlow Blog! This blog was created by{" "}
               <span className="text-teal-500 font-semibold">
                 Muhammad Althaf{" "}
               </span>

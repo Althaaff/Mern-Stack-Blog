@@ -1,7 +1,7 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { FaBars, FaMoon, FaSun, FaTimes } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice.js";
 import { signOutSuccess } from "../redux/user/userSlice.js";
@@ -15,6 +15,7 @@ export default function Header() {
   const { theme } = useSelector((state) => state.theme);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   // console.log(searchTerm);
 
   const handleSignOut = async () => {
@@ -62,9 +63,9 @@ export default function Header() {
           className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
         >
           <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
-            Medium
+            WriteFlow
           </span>
-          Blogs
+          Blog
         </Link>
 
         <form onSubmit={handleSubmit}>
@@ -126,11 +127,17 @@ export default function Header() {
             </Link>
           )}
 
-          <Navbar.Toggle />
+          {/* Hamburger Menu Toggle */}
+          <button
+            className="w-10 h-10 flex items-center justify-center md:hidden text-gray-700 dark:text-gray-300"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <FaTimes size={28} /> : <FaBars size={26} />}
+          </button>
         </div>
 
         {/* hamberger menu */}
-        <Navbar.Collapse>
+        <Navbar.Collapse className={isMenuOpen ? "block" : "hidden"}>
           <Link
             to="/"
             className={`block px-3 py-2 text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
@@ -138,31 +145,52 @@ export default function Header() {
                 ? "bg-gray-100 dark:bg-gray-800 text-indigo-600"
                 : "text-gray-700 dark:text-gray-300"
             }`}
+            onClick={() => setIsMenuOpen(false)}
           >
             Home
           </Link>
 
           <Link
             to="/about"
-            className={`block  px-3 py-2  text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`block px-3 py-2 text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
               path === "/about"
                 ? "bg-gray-100 dark:bg-gray-800 text-indigo-600"
                 : "text-gray-700 dark:text-gray-300"
             }`}
+            onClick={() => setIsMenuOpen(false)}
           >
             About
           </Link>
 
           <Link
             to="/projects"
-            className={`block  px-3 py-2  text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`block px-3 py-2 text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 ${
               path === "/projects"
                 ? "bg-gray-100 dark:bg-gray-800 text-indigo-600"
                 : "text-gray-700 dark:text-gray-300"
             }`}
+            onClick={() => setIsMenuOpen(false)}
           >
             Projects
           </Link>
+
+          <button
+            className={`block lg:hidden md:hidden sm:hidden px-3 py-2 text-lg font-medium rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 w-full`}
+            onClick={() => {
+              dispatch(toggleTheme());
+              setIsMenuOpen(false);
+            }}
+          >
+            {theme === "light" ? (
+              <span className="flex flex-row items-center">
+                <FaMoon className="mr-2" /> Dark Mode
+              </span>
+            ) : (
+              <span className="flex flex-row items-center">
+                <FaSun className="mr-2" /> Light Mode
+              </span>
+            )}
+          </button>
         </Navbar.Collapse>
       </Navbar>
     </>

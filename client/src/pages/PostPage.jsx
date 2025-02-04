@@ -58,6 +58,7 @@ export default function PostPage() {
     const plainText = text.replace(/<[^>]+>/g, "");
 
     if (navigator.clipboard) {
+      console.log("navigator :", navigator.clipboard);
       navigator.clipboard
         .writeText(plainText)
         .then(() => {
@@ -125,7 +126,7 @@ export default function PostPage() {
         </div>
         <div className="bg-gray-800 mx-auto rounded flex flex-col m-1 overflow-hidden">
           <div
-            className="p-6 mx-auto max-w-2xl w-full text-lg post-content prose prose-lg prose-headings:font-bold prose-headings:text-gray-800 prose-p:text-gray-600 prose-a:text-blue-600 hover:prose-a:text-blue-500 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:italic prose-blockquote:pl-4 prose-blockquote:text-gray-600 prose-ul:list-disc prose-ol:list-decimal prose-li:my-2"
+            className="p-6 mx-auto max-w-2xl w-full text-lg post-content prose prose-lg prose-headings:font-bold prose-headings:text-gray-800 text-white prose-p:text-gray-600 prose-a:text-blue-600 hover:prose-a:text-blue-500 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:italic prose-blockquote:pl-4 prose-blockquote:text-gray-600 prose-ul:list-disc prose-ol:list-decimal prose-li:my-2"
             dangerouslySetInnerHTML={{ __html: post && post.content }}
           ></div>{" "}
           <div className="flex justify-end p-2">
