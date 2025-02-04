@@ -18,19 +18,27 @@ export const generateContent = async (req, res, next) => {
     const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAi.getGenerativeModel({ model: "gemini-pro" });
 
-    const prompt = `Write a comprehensive blog post about ${category} in markdown format with proper headings, subheadings, and sections. Focus on: 
-    - provide image related to category
-    - Key concepts
-    - Practical examples
-    - Best practices
-    - Common use cases`;
+    const prompt = `Write a detailed and engaging blog post about ${category}. 
+    - Focus on key concepts, best practices, practical code snippets with black code background, and real-world use cases.
+    - Include a structured format that is user-friendly and easy to read.
+    - Avoid markdown syntax, but use bold formatting for headings and key points.
+    - Ensure readability like a well-designed blog article.`;
 
     const result = await model.generateContent(prompt);
     const response = result.response;
+    const textResponse = response.text(); // Markdown content from AI
 
-    const text = response.text();
+    let formattedContent = textResponse;
 
-    res.status(200).json({ content: text });
+    // Enhance the content with styling and spacing for a cleaner UX
+    formattedContent = formattedContent.replace(
+      /(\*\*|__)(.*?)\1/g,
+      "<strong>$2</strong>"
+    );
+
+    formattedContent = formattedContent.replace(/\n/g, "<br />");
+
+    res.status(200).json({ content: formattedContent });
   } catch (error) {
     next(error);
   }

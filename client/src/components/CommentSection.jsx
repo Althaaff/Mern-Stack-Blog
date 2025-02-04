@@ -237,7 +237,7 @@ export default function ComentSection({ postId }) {
       {showMore && (
         <>
           <span
-            className="text-blue-500 hover:underline  text-sm flex justify-center mt-3"
+            className="text-blue-500 hover:underline cursor-pointer  text-sm flex justify-center mt-3"
             onClick={handleShowMore}
           >
             load more..

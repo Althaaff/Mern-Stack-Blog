@@ -25,7 +25,7 @@ export default function Search() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
-    console.log("search term url :", searchTermFromUrl);
+    // console.log("search term url :", searchTermFromUrl);
     const sortFromUrl = urlParams.get("sort");
     const categoryFromUrl = urlParams.get("category");
 

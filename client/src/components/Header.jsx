@@ -50,6 +50,7 @@ export default function Header() {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("searchTerm", searchTerm);
     const searchQuery = urlParams.toString();
+    // console.log("search query :", searchQuery);
     navigate(`/search?${searchQuery}`);
   };
 
@@ -75,10 +76,16 @@ export default function Header() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+
+          <Button
+            className="h-10 w-12 lg:hidden"
+            color="gray"
+            pill
+            onClick={handleSubmit}
+          >
+            <AiOutlineSearch />
+          </Button>
         </form>
-        <Button className="h-10 w-12 lg:hidden" color="gray" pill>
-          <AiOutlineSearch />
-        </Button>
         <div className="flex gap-2 md:order-2">
           <Button
             className="w-12 h-10 hidden sm:inline"
