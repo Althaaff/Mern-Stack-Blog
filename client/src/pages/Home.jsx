@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PostCard from "../components/PostCard";
 import { tailspin } from "ldrs";
 import { useSelector } from "react-redux";
+import gsap from "gsap";
 
 tailspin.register();
 
@@ -11,6 +12,7 @@ export default function Home() {
   const [posts, setPosts] = useState(null); // Set initial state to null (to differentiate between loading and empty)
   const [loading, setLoading] = useState(true);
   const { theme } = useSelector((state) => state.theme);
+  const textRef = useRef(null);
 
   console.log(theme);
 
@@ -30,9 +32,21 @@ export default function Home() {
     fetchPosts();
   }, []);
 
+  useEffect(() => {
+    gsap.from(textRef.current, {
+      y: -50, // Move from 50px above
+      opacity: 0, // Start fully hidden
+      duration: 1.5, // Animation duration
+      ease: "power2.out", // Smooth easing
+    });
+  }, []);
+
   return (
     <div>
-      <div className="flex flex-col gap-6 p-28 mt-4 px-3 max-w-6xl mx-auto">
+      <div
+        ref={textRef}
+        className="flex flex-col gap-6 p-28 mt-4 px-3 max-w-6xl mx-auto"
+      >
         <h1 className="text-3xl font-bold lg:text-6xl">Welcome to my Blog</h1>
         <p className="text-gray-500 text-xs sm:text-sm">
           Here you'll find a variety of articles and tutorials on topics such as
