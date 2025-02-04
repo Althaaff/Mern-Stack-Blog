@@ -20,36 +20,28 @@ mongoose
     console.log("MongDb Error :", err);
   });
 
+const __dirname = path.resolve();
+
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.listen(process.env.PORT, () => {
+app.listen(3000, () => {
   console.log("server is running on port:3000");
 });
-
-// ------------------- DePloyment ------------------------- //
-
-const __dirname1 = path.resolve();
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname1, "../client/build")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("Api is running!");
-  });
-}
-// ------------------- DePloyment ------------------------- //
 
 app.use("/api/user", useRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/generate", generateContentRouter);
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
