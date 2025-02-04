@@ -44,7 +44,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="flex flex-col mt-16 md:flex-row justify-around items-center gap-8 max-w-7xl mx-auto ">
+      <div className="flex flex-col mt-14 md:flex-row justify-around items-center gap-8 max-w-7xl mx-auto ">
         {/* Blog Text */}
         <div ref={textRef} className="flex flex-col gap-6 p-10 ">
           <h1 className="text-4xl font-bold lg:text-6xl">Welcome to my Blog</h1>

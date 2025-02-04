@@ -7,6 +7,7 @@ import postRouter from "./routes/post.routes.js";
 import commentRouter from "./routes/comment.routes.js";
 import cookieParser from "cookie-parser";
 import generateContentRouter from "./routes/postGenerator.routes.js";
+import path from "path";
 
 dotenv.config();
 
@@ -24,9 +25,25 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("server is running on port:3000");
 });
+
+// ------------------- DePloyment ------------------------- //
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "../client/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Api is running!");
+  });
+}
+// ------------------- DePloyment ------------------------- //
 
 app.use("/api/user", useRouter);
 app.use("/api/auth", authRouter);

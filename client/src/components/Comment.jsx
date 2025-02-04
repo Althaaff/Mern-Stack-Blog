@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Button, Textarea } from "flowbite-react";
 
 export default function Comment({ comment, onLike, onEdit, onDelete }) {
-  console.log("number of likes:", comment.numberOfLikes);
+  // console.log("number of likes:", comment.numberOfLikes);
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);

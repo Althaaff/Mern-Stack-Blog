@@ -18,7 +18,7 @@ export default function ImageSlider() {
 
   return (
     <div
-      className="w-full max-w-[320px] md:mt-10 mt-1 mb-7 mx-auto overflow-hidden rounded-md shadow-[0px_5px_15px_rgba(0,0,0,0.35)]
+      className="w-full max-w-[320px] md:mt-7 mt-1 mb-7 mx-auto overflow-hidden rounded-md dark:shadow-[0px_5px_15px_rgba(0,0,0,0.35)]
 "
     >
       <div

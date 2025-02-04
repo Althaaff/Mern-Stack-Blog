@@ -8,6 +8,7 @@ import {
   signInFailure,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { toast } from "react-toastify";
 // import OAuth from "../components/OAuth";
 
 export default function SignIn() {
@@ -15,6 +16,7 @@ export default function SignIn() {
   const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -34,11 +36,16 @@ export default function SignIn() {
       console.log(data);
       if (data.success === false) {
         dispatch(signInFailure(data.message));
+        toast.error(data.message);
       }
 
       if (res.ok) {
         dispatch(signInSuccess(data));
-        navigate("/");
+        toast.success(`Welcome back, ${data.username || "User"}!`);
+
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
       }
     } catch (error) {
       dispatch(signInFailure(error.message));
